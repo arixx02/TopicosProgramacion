@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1761030127 source:c:\users\dbmic\onedrive\escritorio\proyectos_c\proyectoguiatopicos\guiatest\main.c
+	"../GuiaHeader/GuiaHeader.h"
+	<stdio.h>
+
+1761030172 c:\users\dbmic\onedrive\escritorio\proyectos_c\proyectoguiatopicos\guiaheader\guiaheader.h
+	<stdlib.h>
+
