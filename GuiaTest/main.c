@@ -60,7 +60,8 @@ int main(int argc, char *argv[]){
         printf("no se pudo crear el vector");
         return 1;
     }
-    ingresoU64(&numero);
+    //ingresoU64(&numero);
+    numero=15;
     for (i = 0; i < numero; i++) {
         float valor = i + 1+.141592;
         if (vectorInsertar(&vec, &valor) != TODO_OK) {
@@ -78,6 +79,12 @@ int main(int argc, char *argv[]){
         return 1;
     }
     printf("Decimal parseado: %.8lf\n",(double)decimal);
+    printf(" %d",esFibonacci(fibo(20)));
+    printf("\nSENO de pi/2 %lf",(double)seno(3.1415/2));
+    printf("\n99 * 100 = %llu",producto(99,100));
+    int* ptr=division(11,3);
+    printf("\n5/3-> cociente = %d , resto = %d\n",*ptr,*(ptr+1));
+    printf("SUMA de naturales hasta 5000000: %llu\n",sumaHastaN(5000000));
     return 0;
 }
 

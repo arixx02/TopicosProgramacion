@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1761030532 source:c:\users\dbmic\onedrive\escritorio\proyectos_c\proyectoguiatopicos\guiaheader\guiaheader.c
+1761270042 source:c:\users\dbmic\onedrive\escritorio\proyectos_c\proyectoguiatopicos\guiaheader\guiaheader.c
 	"GuiaHeader.h"
 	<stdio.h>
 	<locale.h>
 	<string.h>
+	<math.h>
 	<windows.h>
 
-1761030532 c:\users\dbmic\onedrive\escritorio\proyectos_c\proyectoguiatopicos\guiaheader\guiaheader.h
+1761269594 c:\users\dbmic\onedrive\escritorio\proyectos_c\proyectoguiatopicos\guiaheader\guiaheader.h
 	<stdlib.h>
 

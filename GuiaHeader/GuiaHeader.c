@@ -1,29 +1,22 @@
 #include "GuiaHeader.h"
-#define TOL 0.001
+#define TOL 0.00001
 #define CAP_INI 60
 #include <stdio.h>
 #define FACTOR_INCR 1.3
 #include <locale.h>
 #include <string.h>
+#include <math.h>
 
 #define PHI  1.61803399
 #define CONJUGATEPHI -0.61803399
 #define RAIZ 2.236067977
 #define binet(n) ((pow(PHI,n)+pow(CONJUGATEPHI,n))/RAIZ)
 
-bool esFibo(int n){ //prueba heuristica usando la formula de binet
-    int num=1;
-    while(absolute(binet(num)-n)>0.5 && binet(num)-n<1){
-        num++;
-    }
-    if(binet(num)-n>=1)return false;
-    return true;
-}
-
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
+#define OFFSET(ptr, bytes) ((void*)((char*)(ptr) + (bytes)))
 
 int guia_init(void) {
     // Set C locale to user default
@@ -45,8 +38,6 @@ int guia_init(void) {
 }
 
 bool redimensionarVector(Vector* vector, float factor);
-
-#define OFFSET(ptr, bytes) ((void*)((char*)(ptr) + (bytes)))
 
 
 
@@ -154,71 +145,34 @@ char* parsePosInt(char const *cadena,u64* destino){
     return ptr;
 }
 
-ld raizSec(u64 a, double tol){ //metodo Newton-Raphson (babilonico)
-    if(a==1)return 1;
-    ld anterior=1;
-    ld res=1;
-    ld aux;
-    while(absolute(res-anterior)>tol || res/anterior==1){
-        aux=res;
-        res=0.5*(anterior+(ld)a/anterior);
-        anterior=aux;
-    }
-    return res;
-}
 
 
-int esPerfecto(u64 n){
-    u64 suma=1;
-    u64 rango=(u64)raizSec(n,TOL);
-    for(u64 i=2;i<=rango;i++){
-        if(n%i==0){
-            suma+=i;
-            suma+=n/i;
-        }
-        if(i*i==n){
-            suma-=n/i;
-        }
-    }
-    if(suma==n){
-        return 1;//es perfecto
-    }
-    if(suma>n){
-        return 0;//es abudante
-    }
-    if(suma<n){
-        return -1;//es deficiente
-    }
-    return -2;
-}
-
-bool esPrimo(u64 n){
-    bool primo=true;
-    if(n%2==0 && n>2){
-        primo=false;
-    }
-    u64 i=3;
-    u64 rango=(u64)raizSec(n,TOL);
-    while((primo==true) && !(i>rango)){
-        if(n%i==0){
-            primo=false;
-        }
-        i+=2;
-    }
-    return primo;
-}
-
-u64 fibo(u64 n){
+/*
+usando xor para intercambio
+u64 fibo(int n){
     if(n<1)return -1;
     u64 anterior=0,fibo=1;
     if(n==1)return anterior;
     if(n==2)return fibo;
-    for(size_t i=1; i<n-1; i++)
+    for(int i=1; i<n; i++)
     {
         anterior^=fibo;
         fibo^=anterior;
         anterior^=fibo;
         fibo+=anterior;
+    }
+    return fibo;
+}
+*/
+u64 fibo(int n){
+    if(n<1)return -1;
+    u64 anterior=0,fibo=1;
+    if(n==1)return anterior;
+    if(n==2)return fibo;
+    for(int i=1; i<n; i++)
+    {
+        fibo+=anterior; //actual=actual
+        anterior=fibo-anterior; //anterior=actual+anterior-actual=anterior
     }
     return fibo;
 }
@@ -262,6 +216,25 @@ bool parsePosDouble(char const *cadena,ld* destino){
     return true;
 }
 
+//EJERCICIOS DE LA GUIA-------------------------------------------------------------------------------------------
+
+u64 factorial(int n){
+    u64 res=1;
+    for(int i=1;i<=n;i++){
+        res*=i;
+    }
+    return res;
+}
+
+u64 combinatorio(int m, int n){
+    if(m<n){
+        u64 aux=m;
+        m=n;
+        n=aux;
+    }
+    return factorial(m)/(factorial(n)*factorial(m-n));
+}
+
 ld ex(int x, double tol){
     ld res=0;
     unsigned int contador=1;
@@ -272,4 +245,141 @@ ld ex(int x, double tol){
         contador++;
     }
     return res;
+}
+
+ld raizSec(u64 a, double tol){ //metodo Newton-Raphson (babilonico)
+    if(a==1)return 1;
+    ld anterior=1;
+    ld res=1;
+    ld aux;
+    while(absolute(res-anterior)>tol || res/anterior==1){
+        aux=res;
+        res=0.5*(anterior+(ld)a/anterior);
+        anterior=aux;
+    }
+    return res;
+}
+
+bool esFibo(int n){ //prueba heuristica usando la formula de binet
+    int num=1;
+    while(absolute(binet(num)-n)>0.5 && binet(num)-n<1){
+        num++;
+    }
+    if(binet(num)-n>=1)return false;
+    return true;
+}
+
+bool esFibonacci(u64 n){
+    u64 anterior=0, actual=1;
+    while(actual<n && anterior<=actual){
+        actual+=anterior;
+        anterior=actual-anterior;
+    }
+    if(actual==n){
+        printf("%llu ES FIBO",n);
+        return true;
+    }
+    return false;
+}
+
+ld seno(ld x){
+    ld res=0;
+    unsigned int contador=1;
+    ld siguiente=x;
+    while(absolute(siguiente)>TOL){
+        res+=siguiente;
+        contador+=2;
+        siguiente*=(-x*x)/(ld)(contador*(contador-1));
+    }
+    return res;
+}
+
+u64 producto(int a, int b){
+    u64 res=0;
+    for(u64 i=0;i<b;i++){
+        res+=a;
+    }
+    return res;
+}
+
+int* division(unsigned int a,unsigned int b){
+    static int division[2]={0,0};
+    if(b==0){
+        return NULL;
+    }
+    int cociente=0;
+    int resto=a;
+    while(resto>=b){
+        resto-=b;
+        cociente++;
+    }
+    division[0]=cociente;
+    division[1]=resto;
+    return division;
+}
+
+u64 sumaHastaN(unsigned int n){
+    return (u64)n * (n+1) /2;
+}
+
+u64 sumaN_pares(unsigned int n){
+    return (u64)n * (n+1);
+}
+
+u64 sumaParesMenoresN(unsigned int n){
+    unsigned int k = (n-1)/2;
+    return (u64)k*(k+1);
+}
+
+int esPerfecto(u64 n){
+    u64 suma=1;
+    u64 rango=(u64)raizSec(n,TOL);
+    for(u64 i=2;i<=rango;i++){
+        if(n%i==0){
+            suma+=i;
+            suma+=n/i;
+        }
+        if(i*i==n){
+            suma-=n/i;
+        }
+    }
+    if(suma==n){
+        return 1;//es perfecto
+    }
+    if(suma>n){
+        return 0;//es abudante
+    }
+    if(suma<n){
+        return -1;//es deficiente
+    }
+    return -2;
+}
+
+bool esPrimo(u64 n){
+    bool primo=true;
+    if(n%2==0 && n>2){
+        primo=false;
+    }
+    u64 i=3;
+    u64 rango=(u64)raizSec(n,TOL);
+    while((primo==true) && !(i>rango)){
+        if(n%i==0){
+            primo=false;
+        }
+        i+=2;
+    }
+    return primo;
+}
+
+bool insertarEnPosicionN(Vector* vector,unsigned int n,void* elemento){
+    if(n>vector->ce){
+        return false;
+    }
+    void* cursor=vector->vec;
+    cursor=OFFSET(vector->vec,n*vector->tamElem);
+    memcpy(cursor,elemento,vector->tamElem);
+    if(n==vector->ce){
+        vector->ce++;
+    }
+    return true;
 }

@@ -25,8 +25,6 @@ typedef struct
 }
 Vector;
 
-bool esFibo(int n);
-
 typedef bool (*ingreso)(void* var);
 
 typedef void (*Accion)(void* e, void* datos);
@@ -39,22 +37,46 @@ int vectorInsertar(Vector* vector, const void* elem); // realloc
 
 void vectorDestruir(Vector* vector); // free
 
-u64 fibo(u64 n);
+u64 fibo(int n);
 
 ld absolute(ld n);
-
-int esPerfecto(u64 n);
-
-ld raizSec(u64 a, double tol);
 
 char* parsePosInt(char const *cadena,u64* destino);
 
 bool parsePosDouble(char const *cadena,ld* destino);
 
-bool esPrimo(u64 n);
+int guia_init(void); // llamar una vez al iniciar el programa
 
-int guia_init(void); // call this once at start
+//EJERCICIOS DE LA GUIA
+
+u64 factorial(int n);
+
+u64 combinatorio(int m, int n);
 
 ld ex(int x, double tol);
+
+ld raizSec(u64 a, double tol);
+
+bool esFibo(int n);
+
+bool esFibonacci(u64 n);
+
+ld seno(ld x);
+
+int esPerfecto(u64 n);
+
+u64 producto(int a, int b);
+
+int* division(unsigned int a,unsigned int b);
+
+u64 sumaHastaN(unsigned int n);
+
+u64 sumaN_pares(unsigned int n);
+
+u64 sumaParesMenoresN(unsigned int n);
+
+bool esPrimo(u64 n);
+
+bool insertarEnPosicionN(Vector* vector,unsigned int n,void* elemento);
 
 #endif // GUIAHEADER_H_INCLUDED
